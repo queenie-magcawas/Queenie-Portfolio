@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NYC Crash Analytics | Intelligent Dashboard</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    background: #0a0c15;
+    color: #eef2ff;
+    overflow-x: hidden;
+}
+
+/* animated gradient bg */
+.gradient-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    background: radial-gradient(circle at 20% 30%, rgba(2, 15, 35, 1) 0%, rgba(0, 5, 18, 1) 100%);
+}
+
+.gradient-bg::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        repeating-linear-gradient(45deg, rgba(0, 255, 255, 0.02) 0px, rgba(0, 255, 255, 0.02) 2px, transparent 2px, transparent 8px),
+        repeating-linear-gradient(135deg, rgba(0, 100, 255, 0.03) 0px, rgba(0, 100, 255, 0.03) 1px, transparent 1px, transparent 12px);
+    pointer-events: none;
+}
+
+/* Glassmorphic navbar */
+.navbar {
+    background: rgba(10, 14, 23, 0.75);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+    padding: 1rem 0;
+}
+
+.navbar-brand {
+    font-weight: 800;
+    font-size: 1.8rem;
+    background: linear-gradient(135deg, #A5F0FF, #3B82F6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent !important;
+    letter-spacing: -0.5px;
+}
+
+.navbar-brand i {
+    background: none;
+    -webkit-background-clip: unset;
+    color: #3b82f6;
+    margin-right: 6px;
+}
+
+.btn-custom {
+    padding: 10px 24px;
+    border-radius: 40px;
+    font-weight: 600;
+    transition: 0.25s ease;
+    letter-spacing: 0.3px;
+}
+
+.btn-outline-cyber {
+    border: 1px solid rgba(0, 255, 255, 0.6);
+    background: transparent;
+    color: #0ff;
+    box-shadow: 0 0 5px rgba(0,255,255,0.2);
+}
+
+.btn-outline-cyber:hover {
+    background: rgba(0, 255, 255, 0.1);
+    box-shadow: 0 0 12px rgba(0,255,255,0.4);
+    border-color: #0ff;
+    color: #0ff;
+}
+
+.btn-primary-cyber {
+    background: linear-gradient(95deg, #2563eb, #06b6d4);
+    border: none;
+    color: white;
+    box-shadow: 0 4px 14px rgba(37,99,235,0.3);
+}
+
+.btn-primary-cyber:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(37,99,235,0.5);
+    background: linear-gradient(95deg, #3b82f6, #22d3ee);
+}
+
+/* Hero section */
+.hero {
+    min-height: 92vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding: 2rem 0;
+}
+
+.glitch-text {
+    font-size: 4.2rem;
+    font-weight: 800;
+    background: linear-gradient(125deg, #ffffff, #60a5fa, #c084fc);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shine 5s linear infinite;
+}
+
+@keyframes shine {
+    0% { background-position: 0% center; }
+    100% { background-position: 200% center; }
+}
+
+.hero-badge {
+    display: inline-block;
+    background: rgba(0, 255, 255, 0.12);
+    backdrop-filter: blur(4px);
+    border-radius: 40px;
+    padding: 6px 16px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    border: 1px solid rgba(0,255,255,0.3);
+    margin-bottom: 1rem;
+    color: #7dd3fc;
+}
+
+.hero p {
+    color: #b9c7d9;
+    font-size: 1.2rem;
+    line-height: 1.5;
+}
+
+/* floating shape */
+.shape-glow {
+    position: absolute;
+    width: 450px;
+    height: 450px;
+    background: radial-gradient(circle, rgba(56,189,248,0.2), transparent 70%);
+    border-radius: 50%;
+    filter: blur(60px);
+    bottom: -150px;
+    right: -100px;
+    z-index: -1;
+    animation: pulseGlow 8s infinite alternate;
+}
+
+@keyframes pulseGlow {
+    0% { opacity: 0.4; transform: scale(0.9);}
+    100% { opacity: 0.8; transform: scale(1.2);}
+}
+
+/* footer */
+.cyber-footer {
+    background: rgba(2, 8, 20, 0.8);
+    backdrop-filter: blur(8px);
+    border-top: 1px solid rgba(0, 255, 255, 0.2);
+    padding: 2rem;
+    text-align: center;
+    margin-top: 4rem;
+    font-size: 0.9rem;
+    color: #94a3b8;
+}
+
+.name-signature {
+    background: linear-gradient(145deg, #b9f3ff, #818cf8);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* Center CTA text */
+.cta-content {
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .glitch-text {
+        font-size: 2.5rem;
+    }
+    .hero p {
+        font-size: 1rem;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="gradient-bg"></div>
+<div class="shape-glow"></div>
+
+<!-- GLASS NAVBAR -->
+<nav class="navbar navbar-expand-lg py-3 fixed-top">
+<div class="container">
+<a class="navbar-brand" href="index.html">
+    <i class="bi bi-ev-station-fill"></i> NYC Crash <span style="color:#38bdf8;">Analytics</span>
+</a>
+
+<div class="ms-auto d-flex gap-2">
+    <a href="login.php" class="btn btn-outline-cyber btn-custom"><i class="bi bi-box-arrow-in-right"></i> Login</a>
+    <a href="register.php" class="btn btn-primary-cyber btn-custom"><i class="bi bi-person-plus-fill"></i> Register</a>
+</div>
+</div>
+</nav>
+
+<!-- HERO SECTION -->
+<section class="hero">
+<div class="container" style="margin-top: 70px;">
+<div class="row align-items-center g-5">
+
+<div class="col-lg-6">
+    <div class="hero-badge">
+        <i class="bi bi-graph-up"></i> NYC OPEN DATA • 2025 ACCIDENT ANALYSIS
+    </div>
+    <h1 class="glitch-text">Decode NYC Crash Analytics</h1>
+    <p class="mt-4 mb-4">
+        Next‑gen dashboard with AI‑ready insights, heatmap visualization, and predictive filtering.  
+        Comprehensive crash data analysis for New York City.
+    </p>
+    <div class="d-flex flex-wrap gap-3">
+        <a href="register.php" class="btn btn-primary-cyber btn-custom btn-lg"><i class="bi bi-lightning-charge-fill"></i> Launch Dashboard</a>
+        <a href="#" class="btn btn-outline-cyber btn-custom btn-lg"><i class="bi bi-compass"></i> Explore modules</a>
+    </div>
+</div>
+
+<div class="col-lg-6 text-center position-relative">
+    <div class="tech-glow-card">
+        <img src="https://cdn-icons-png.flaticon.com/512/1055/1055687.png" 
+             class="img-fluid" style="filter: drop-shadow(0 0 15px #3b82f6); max-width: 380px;" 
+             alt="analytics dashboard">
+    </div>
+    <div class="mt-3 small text-muted">
+        <i class="bi bi-map"></i> Live crash mapping • Borough heatmaps • Export ready
+    </div>
+</div>
+
+</div>
+</div>
+</section>
+
+<!-- CTA section - Centered -->
+<section class="py-4">
+<div class="container">
+    <div class="p-5 rounded-5 mx-auto text-center" style="background: radial-gradient(ellipse at 30% 40%, #0a142e, #020617); border: 1px solid #2d3e6e; max-width: 800px;">
+        <i class="bi bi-stars fs-1 text-primary"></i>
+        <h3 class="fw-bold mt-2">Explore NYC Crash Analytics Dashboard</h3>
+        <p class="mb-4 text-light-50">Access the complete platform with interactive maps, heat layers, and auto reports.</p>
+        <a href="register.php" class="btn btn-primary-cyber btn-lg px-5"><i class="bi bi-speedometer2"></i> Enter Dashboard</a>
+    </div>
+</div>
+</section>
+
+<!-- FOOTER cyber style - Centered -->
+<footer class="cyber-footer">
+    <div class="container text-center">
+        <div class="mb-2">
+            <span>© 2025 NYC Crash Analytics | <span class="name-signature">Queenie Marie O. Magcawas</span></span>
+        </div>
+        <div class="mb-2">
+            <i class="bi bi-github mx-2"></i> 
+            <i class="bi bi-twitter-x mx-2"></i> 
+            <i class="bi bi-linkedin mx-2"></i>
+            <span class="ms-2 badge bg-dark">2025 accident data</span>
+        </div>
+        <div class="small text-secondary">
+            🗽 Built for NYC Vision Zero • powered by 2025 crash data | LOCATION filtering & (0,0) auto-exclusion
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    console.log("%c NYC Crash Analytics | Advanced Interface | Queenie Marie O. Magcawas", "color: #0ff; font-size: 14px; font-weight: bold;");
+</script>
+</body>
+</html>
